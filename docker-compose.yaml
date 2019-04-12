@@ -3,4 +3,6 @@ services:
   bot:
     build:
       context: ./
-      dockerfile: ./docker/bot/Dockerfile
+      dockerfile: bot/Dockerfile
+    environment:
+      TOKEN: ${TOKEN}

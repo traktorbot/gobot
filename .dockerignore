@@ -1,5 +1,2 @@
 .*
 docker-compose.yaml
-
-# folders
-build/

@@ -1,14 +1,20 @@
 package main
 
 import (
-	"log"
 	"github.com/go-telegram-bot-api/telegram-bot-api"
+	"github.com/namsral/flag"
+	"log"
 )
 
 func main() {
-	bot, err := tgbotapi.NewBotAPI("MyAwesomeBotToken")
+
+	var botToken string
+	flag.StringVar(&botToken, "TOKEN", "", "bot token")
+	flag.Parse()
+
+	bot, err := tgbotapi.NewBotAPI(botToken)
 	if err != nil {
-		log.Panic("Not working")
+		log.Panic(err)
 	}
 
 	bot.Debug = true
@@ -30,6 +36,9 @@ func main() {
 		msg := tgbotapi.NewMessage(update.Message.Chat.ID, update.Message.Text)
 		msg.ReplyToMessageID = update.Message.MessageID
 
-		bot.Send(msg)
+		_, err := bot.Send(msg)
+		if err != nil {
+			log.Println(err)
+		}
 	}
 }

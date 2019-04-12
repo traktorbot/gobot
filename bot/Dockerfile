@@ -1,7 +1,7 @@
 FROM golang:1.12-alpine as builder
 
 # Copy content of project root folder
-COPY ./ /app
+COPY ./bot /app
 
 WORKDIR /app
 
@@ -17,8 +17,7 @@ WORKDIR /app
 # and will therefore be cached for speeding up the next build
 # 4.
 # Build the executable to `/app/bot`.
-RUN ls -halt && \
-    mkdir /user && \
+RUN mkdir /user && \
     echo 'nobody:x:65534:65534:nobody:/:' > /user/passwd && \
     echo 'nobody:x:65534:' > /user/group && \
     apk add --no-cache ca-certificates git && \
@@ -31,6 +30,8 @@ FROM scratch AS final
 COPY --from=builder /user/group /user/passwd /etc/
 # Import the compiled executable from the first stage.
 COPY --from=builder /app /app
+# Import the Certificate-Authority certificates for enabling HTTPS.
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
 # Perform any further action as an unprivileged user.
 USER nobody:nobody
