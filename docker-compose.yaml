@@ -2,7 +2,5 @@ version: '3.7'
 services:
   bot:
     build:
-      context: ./docker/bot
-      dockerfile: Dockerfile
-    volumes:
-      - ./:/app
+      context: ./
+      dockerfile: ./docker/bot/Dockerfile
